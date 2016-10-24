@@ -45,7 +45,7 @@ type GitHubCommitJson = {
     commit: {
         message: string
     },
-    url: string
+    html_url: string
 }
 type GitHubCompareJson = { commits: GitHubCommitJson[] }
 type GitHubErrorJson = { message: string }
@@ -62,10 +62,10 @@ const getCommits = (baseRef: string) => (
         ))
         .then(result => (
             mapResult(result, gitHubCompareJson => (
-                gitHubCompareJson.commits.map(githubCommitJson => (
+                gitHubCompareJson.commits.map((githubCommitJson): Commit => (
                     {
                         message: githubCommitJson.commit.message,
-                        url: githubCommitJson.url
+                        htmlUrl: githubCommitJson.html_url,
                     }
                 ))
             ))
@@ -74,7 +74,7 @@ const getCommits = (baseRef: string) => (
 
 type Commit = {
     message: string,
-    url: string
+    htmlUrl: string
 }
 type State = {
     baseKey?: string
@@ -96,7 +96,7 @@ const render = (state: State) => (
         h('h1', {}, [`${state.baseKey}...master`]),
         !!state.commitsResult && state.commitsResult.success && h('ul', {}, state.commitsResult.value.map(commit => (
             h('li', {}, [
-                h('a', { href: commit.url }, [commit.message])
+                h('a', { href: commit.htmlUrl }, [commit.message])
             ])
         )))
     ])
