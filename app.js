@@ -20799,9 +20799,9 @@ const getCommits = (baseRef) => (fetch(`${gitHubApiUrl}/compare/${baseRef}...${m
     .then((response) => (response.ok
     ? response.json().then((json) => new lib_1.Success(json))
     : response.json().then((json) => new lib_1.Failure(json.message))))
-    .then(result => (lib_1.mapResult(result, gitHubCompareJson => (gitHubCompareJson.commits.map(githubCommitJson => ({
+    .then(result => (lib_1.mapResult(result, gitHubCompareJson => (gitHubCompareJson.commits.map((githubCommitJson) => ({
     message: githubCommitJson.commit.message,
-    url: githubCommitJson.url
+    htmlUrl: githubCommitJson.html_url,
 })))))));
 const render = (state) => (lib_1.h('div', {}, [
     lib_1.h('select', {
@@ -20814,7 +20814,7 @@ const render = (state) => (lib_1.h('div', {}, [
     }, Array.from(keyToOrigin.keys()).map(key => (lib_1.h('option', {}, [key])))),
     lib_1.h('h1', {}, [`${state.baseKey}...master`]),
     !!state.commitsResult && state.commitsResult.success && lib_1.h('ul', {}, state.commitsResult.value.map(commit => (lib_1.h('li', {}, [
-        lib_1.h('a', { href: commit.url }, [commit.message])
+        lib_1.h('a', { href: commit.htmlUrl }, [commit.message])
     ]))))
 ]));
 const rootEl = document.querySelector('#root');
